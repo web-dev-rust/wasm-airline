@@ -1,9 +1,8 @@
 use yew::prelude::*;
 use yew::services::{
-    fetch::{FetchService, FetchTask, Request, Response, FetchOptions, Referrer},
+    fetch::{FetchService, FetchTask, Request, Response},
 };
 use yew::format::{Text, Json};
-use yew::web_sys::{RequestMode};
 use crate::gql::fetch_gql;
 
 
@@ -38,13 +37,8 @@ impl Airline {
               .uri(self.graphql_url.clone())
               .body(Json(&request))
               .unwrap();
-          let options = FetchOptions{
-            mode: Some(RequestMode::NoCors),
-            ..FetchOptions::default()
-          };
 
-        //   let task = self.fetch.fetch(request, callback).unwrap();  
-          let task = self.fetch.fetch_with_options(request, options, callback).unwrap();
+          let task = self.fetch.fetch(request, callback).unwrap();
           self.fetch_task = Some(task);
           self.fetching = false;
       }
