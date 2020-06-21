@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "8080:8080"
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    depends_on:
+      - redis
+      - web
+    links:
+      - redis
+      - web
+    networks:
+      internal_net:
+        ipv4_address: 172.21.1.4  
+
+  web:
+    build:
+      context: airline-tickets/
+      dockerfile: Dockerfile
+    command: cargo run
+    ports:
+      - "4000:4000"
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    environment:
+      - CARGO_HOME=/var/www/
+    depends_on:
+      - redis
+    links:
+      - redis
+    networks:
+      internal_net:
+        ipv4_address: 172.21.1.2
+
+  redis:
+    container_name: "redis"
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      internal_net:
+        ipv4_address: 172.21.1.15
+
+networks:
+  internal_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/16
