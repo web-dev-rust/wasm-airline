@@ -1,6 +1,6 @@
 use yew::prelude::*;
 use yew::services::{
-    fetch::{FetchService, FetchTask, Request, Response},
+    fetch::{FetchService, FetchTask, Request, Response}
 };
 use yew::format::{Text, Json};
 use crate::gql::fetch_gql;
@@ -58,7 +58,7 @@ impl Component for Airline {
             link: link,
             fetch_task: None,
             fetching: false,
-            graphql_url: "http://172.21.1.2:4000/graphql".to_string(),
+            graphql_url: "http://localhost:4000/graphql".to_string(),
             graphql_response: None
         }
     }
