@@ -40,12 +40,13 @@ impl Airline {
 
           let task = self.fetch.fetch(request, callback).unwrap();
           self.fetch_task = Some(task);
-          self.fetching = false;
+          Msg::Fetching(false);
       }
 }
 
 pub enum Msg {
     FetchGql(Option<Text>),
+    Fetching(bool)
 }
 
 impl Component for Airline {
@@ -65,7 +66,7 @@ impl Component for Airline {
 
     fn rendered(&mut self, first_render: bool) {
         if first_render {
-            self.fetching = true;
+            Msg::Fetching(true);
           self.fetch_data(); 
         }
      }
@@ -87,6 +88,9 @@ impl Component for Airline {
                         None
                     }
                 }
+            },
+            Msg::Fetching(fetch) => {
+                self.fetching = fetch;
             }
         }
         true
