@@ -1,3 +1,4 @@
+#![recursion_limit="256"]
 mod app;
 mod gql;
 mod best_prices;

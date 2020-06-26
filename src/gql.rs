@@ -26,3 +26,9 @@ pub struct GqlResponse {
 pub struct GqlFields {
     best_prices: BestPrices
 }
+
+impl GqlResponse {
+    pub fn best_prices(self) -> BestPrices {
+        self.data.best_prices
+    }
+}

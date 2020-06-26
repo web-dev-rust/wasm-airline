@@ -59,7 +59,7 @@ impl Component for Airline {
             fetch: FetchService::new(),
             link: link,
             fetch_task: None,
-            fetching: false,
+            fetching: true,
             graphql_url: "http://localhost:4000/graphql".to_string(),
             graphql_response: None
         }
@@ -101,20 +101,24 @@ impl Component for Airline {
     fn view(&self) -> Html {
         if self.fetching {
             html! {
-                <div class="loading">
-                    {"Loading..."}
+                <div class="loading-margin">
+                    <div class="loader"></div>
                 </div>
             } 
         } else {
             html! {
-                <div>
-                    <p>{ 
+                <div class="body">
+                    { 
                         if let Some(data) = &self.graphql_response {
-                            serde_json::to_string(data).unwrap()
+                            data.clone().best_prices().view()
                         } else {
-                            "Failed to fetch".to_string()
+                            html!{
+                                <p class="failed-fetch">
+                                    {"Failed to fetch"}
+                                </p>
+                            }
                         }
-                    }</p>
+                    }
                 </div>
             }
         }
