@@ -1,5 +1,6 @@
 mod app;
 mod gql;
+mod best_prices;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::App;

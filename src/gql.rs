@@ -1,4 +1,6 @@
 use serde_json::{json, Value};
+use serde::{Deserialize, Serialize};
+use crate::best_prices::BestPrices;
 
 pub fn fetch_gql() -> Value {
     json!({
@@ -12,4 +14,15 @@ pub fn fetch_gql() -> Value {
              }
         }"
     })
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+pub struct GqlResponse {
+    data: GqlFields
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct GqlFields {
+    best_prices: BestPrices
 }

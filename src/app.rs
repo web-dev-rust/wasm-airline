@@ -3,7 +3,8 @@ use yew::services::{
     fetch::{FetchService, FetchTask, Request, Response}
 };
 use yew::format::{Text, Json};
-use crate::gql::fetch_gql;
+use serde_json::from_str;
+use crate::gql::{GqlResponse, fetch_gql};
 
 
 pub struct Airline {
@@ -12,7 +13,7 @@ pub struct Airline {
     fetch_task: Option<FetchTask>,
     fetching: bool,
     graphql_url: String,
-    graphql_response: Option<String>
+    graphql_response: Option<GqlResponse>
 }
 
 
@@ -81,7 +82,8 @@ impl Component for Airline {
                 self.graphql_response = match data {
                     Some(Ok(val)) => {
                         self.fetching = false;
-                        Some(val)
+                        let resp: GqlResponse = from_str(&val).unwrap();
+                        Some(resp)
                     },
                     _ => {
                         self.fetching = false;
@@ -108,9 +110,9 @@ impl Component for Airline {
                 <div>
                     <p>{ 
                         if let Some(data) = &self.graphql_response {
-                            data
+                            serde_json::to_string(data).unwrap()
                         } else {
-                            "Failed to fetch"
+                            "Failed to fetch".to_string()
                         }
                     }</p>
                 </div>
