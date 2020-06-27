@@ -5,7 +5,7 @@ use crate::best_prices::BestPrices;
 pub fn fetch_gql() -> Value {
     json!({
         "query": "{
-             bestPrices(departure: \"2020-07-21\", origin: \"POA\", destination: \"GRU\") {
+             bestPrices(departure: \"2020-06-28\", origin: \"POA\", destination: \"GRU\") {
                 bestPrices {
                     date
                     available

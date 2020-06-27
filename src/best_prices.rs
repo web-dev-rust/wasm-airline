@@ -13,7 +13,7 @@ pub struct BestPrices {
 pub struct BestPrice {
     date: String,
     available: bool,
-    price: Price
+    price: Option<Price>
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
@@ -38,13 +38,19 @@ impl BestPrices {
                                             date.unwrap().format("%a %e %b").to_string()
                                         }
                                     } <br/>
-                                    {format!("R$ {}", bp.price.amount).replace(".", ",")}
+                                    {format!("R$ {}", bp.price.unwrap().amount).replace(".", ",")}
                                 </div>
                             }
                         } else {
                             html!{
                                 <div class="empty-cell">
-                                    { bp.date }
+                                    {
+                                        {
+                                            let date = Utc.datetime_from_str(&format!("{} 00:00:00", bp.date), "%Y-%m-%d %H:%M:%S");
+                                            date.unwrap().format("%a %e %b").to_string()
+                                        }
+                                     } <br/>
+                                    {"N/A"}
                                 </div>
                             }
                         }
