@@ -110,12 +110,12 @@ impl Component for Airline {
                 <div class="body">
                     { 
                         if let Some(data) = &self.graphql_response {
-                            // html!{<div>
-                            //     <div> {data.clone().best_prices().view()} </div>
-                                // <div> {
+                            html!{<div>
+                                <div> {data.clone().best_prices().view()} </div>
+                                <div> {
                                     data.clone().recommendations().view()
-                                // } </div>
-                            //  </div> }
+                                } </div>
+                             </div> }
                         } else {
                             html!{
                                 <p class="failed-fetch">
