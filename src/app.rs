@@ -112,9 +112,7 @@ impl Component for Airline {
                         if let Some(data) = &self.graphql_response {
                             html!{<div>
                                 <div> {data.clone().best_prices().view()} </div>
-                                <div> {
-                                    data.clone().recommendations().view()
-                                } </div>
+                                <div> { data.clone().recommendations().view() } </div>
                              </div> }
                         } else {
                             html!{

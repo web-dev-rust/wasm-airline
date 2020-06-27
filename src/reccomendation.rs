@@ -71,7 +71,7 @@ impl Component for Recommendations {
     fn view(&self) -> Html {
         html!{
             <div class="flight-container"> {
-                self.data.clone()[0].clone().flights.into_iter()
+                self.data[0].clone().flights.into_iter()
                 .map(|r|
                     html!{
                         <div class="flight"> 
