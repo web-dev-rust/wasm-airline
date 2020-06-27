@@ -1,7 +1,8 @@
-#![recursion_limit="256"]
+#![recursion_limit="1024"]
 mod app;
 mod gql;
 mod best_prices;
+mod reccomendation;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::App;
