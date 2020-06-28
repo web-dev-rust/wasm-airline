@@ -13,9 +13,9 @@ pub struct Airline {
     fetch_task: Option<FetchTask>,
     fetching: bool,
     graphql_url: String,
-    graphql_response: Option<GqlResponse>
+    graphql_response: Option<GqlResponse>,
+    filter_cabin: String,
 }
-
 
 impl Airline {
     pub fn fetch_data(&mut self) {
@@ -47,7 +47,8 @@ impl Airline {
 
 pub enum Msg {
     FetchGql(Option<Text>),
-    Fetching(bool)
+    Fetching(bool),
+    Cabin(String)
 }
 
 impl Component for Airline {
@@ -61,7 +62,8 @@ impl Component for Airline {
             fetch_task: None,
             fetching: true,
             graphql_url: "http://localhost:4000/graphql".to_string(),
-            graphql_response: None
+            graphql_response: None,
+            filter_cabin: String::from("Y"),
         }
     }
 
@@ -93,6 +95,9 @@ impl Component for Airline {
             },
             Msg::Fetching(fetch) => {
                 self.fetching = fetch;
+            },
+            Msg::Cabin(c) => {
+                self.filter_cabin = c
             }
         }
         true
@@ -112,7 +117,7 @@ impl Component for Airline {
                         if let Some(data) = &self.graphql_response {
                             html!{<div>
                                 <div> {data.clone().best_prices().view()} </div>
-                                <div> { data.clone().recommendations().view() } </div>
+                                <div> { data.clone().recommendations().view(&self.link, &self.filter_cabin) } </div>
                              </div> }
                         } else {
                             html!{
