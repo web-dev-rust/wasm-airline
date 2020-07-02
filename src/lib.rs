@@ -10,5 +10,5 @@ use yew::prelude::App;
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    App::<app::Airline>::new().mount_as_body();
+    App::<app::Model>::new().mount_as_body();
 }

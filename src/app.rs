@@ -3,9 +3,22 @@ use yew::services::{
     fetch::{FetchService, FetchTask, Request, Response}
 };
 use yew::format::{Text, Json};
+use yew::virtual_dom::VNode;
+use yew_router::{router::Router, Switch};
 use serde_json::from_str;
 use crate::gql::{GqlResponse, fetch_gql};
 
+#[derive(Switch, Debug, Clone)]
+enum AppRoute {
+    #[to = "/oneway?departure={departure}&origin={origin}&destination={destination}"]
+    Oneway {departure: String, origin: String, destination: String},
+    #[to = "/hello"]
+    Hello,
+    #[to = "/"]
+    NotFound
+}
+
+pub struct Model {}
 
 pub struct Airline {
     fetch: FetchService,
@@ -48,7 +61,7 @@ impl Airline {
 pub enum Msg {
     FetchGql(Option<Text>),
     Fetching(bool),
-    Cabin(String)
+    Cabin(String),
 }
 
 impl Component for Airline {
@@ -98,7 +111,7 @@ impl Component for Airline {
             },
             Msg::Cabin(c) => {
                 self.filter_cabin = c
-            }
+            },
         }
         true
     }
@@ -118,7 +131,7 @@ impl Component for Airline {
                             html!{<div>
                                 <div> {data.clone().best_prices().view()} </div>
                                 <div> { data.clone().recommendations().view(&self.link, &self.filter_cabin) } </div>
-                             </div> }
+                            </div> }
                         } else {
                             html!{
                                 <p class="failed-fetch">
@@ -129,6 +142,42 @@ impl Component for Airline {
                     }
                 </div>
             }
+        }
+    }
+}
+
+
+impl Component for Model {
+    type Message = ();
+    type Properties = ();
+
+    fn create(_: Self::Properties, _link: ComponentLink<Self>) -> Self {
+        Model {}
+    }
+
+    fn change(&mut self, _: <Self as yew::html::Component>::Properties) -> bool { 
+        false
+     }
+
+    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
+        false
+    }
+
+    fn view(&self) -> VNode { 
+        html! {
+            <Router<AppRoute, ()>
+                render = Router::render(|switch: AppRoute| {
+                    match switch {
+                        AppRoute::NotFound => VNode::from("404"),
+                        AppRoute::Hello => html!{<p> {"Hello"} </p>},
+                        AppRoute::Oneway {departure, origin, destination} => html!{
+                            <p>{
+                                format!("{}/{}/{}", departure, origin, destination)
+                            }</p>
+                        }
+                    }
+                })
+            />
         }
     }
 }
