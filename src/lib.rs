@@ -3,6 +3,7 @@ mod app;
 mod gql;
 mod best_prices;
 mod reccomendation;
+mod index;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::App;
@@ -10,5 +11,5 @@ use yew::prelude::App;
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    App::<app::Model>::new().mount_as_body();
+    App::<index::Model>::new().mount_as_body();
 }
