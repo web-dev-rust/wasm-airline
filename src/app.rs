@@ -14,6 +14,9 @@ pub struct Airline {
     graphql_url: String,
     graphql_response: Option<GqlResponse>,
     filter_cabin: String,
+    departure: String,
+    origin: String,
+    destination: String
 }
 
 #[derive(Properties, Clone)]
@@ -25,7 +28,7 @@ pub struct Props {
 
 impl Airline {
     pub fn fetch_data(&mut self) {
-        let request = fetch_gql();
+        let request = fetch_gql(self.departure.clone(), self.origin.clone(), self.destination.clone());
   
           let callback = self.link.callback(
               move |response: Response<Text>| {
@@ -70,6 +73,9 @@ impl Component for Airline {
             graphql_url: "http://localhost:4000/graphql".to_string(),
             graphql_response: None,
             filter_cabin: String::from("Y"),
+            departure: props.departure,
+            origin: props.origin,
+            destination: props.destination
         }
     }
 

@@ -1,0 +1,155 @@
+.loading-margin {
+  transform: translate(35%, 20%);
+}
+
+.loader {
+    border: 1.25rem solid #f3f3f3; /* Light grey */
+    border-top: 1.25rem solid #03253b; /* Blue */
+    border-radius: 50%;
+    width: 12.5rem;
+    height: 12.5rem;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+.body {
+    width: 80%;
+    text-align: center;
+  }
+
+.carrousel {
+    transform: translate(10%, 50%);
+    display: table-row;
+}
+
+.cell {
+    text-align: center;
+    vertical-align: middle;
+    font-size: medium;
+    height: 100%;
+    width: 15rem;
+    display: table-cell;
+    border: 1px solid lightgrey;
+}
+
+.empty-cell {
+    padding: 2rem 1rem;
+    background-color: #e1e1e1;
+}
+
+.full-cell {
+    padding: 2rem 1rem;
+    background-color: #f1f0f0;
+}
+
+.flight-container {
+  width: 72%;
+  margin-top: 5rem;
+  transform: translate(35%, 0%);
+  background-color: #f1f0f0;
+}
+
+.flight {
+  display: table-row;
+  border: 1px solid lightgrey;
+}
+
+.flight-cell {
+  padding: 2rem 1rem;
+  display: table-cell;
+  border-bottom: 1px solid lightgray;
+}
+
+.origins-destinations {
+  width: 22rem;
+  display: flex;
+}
+
+.arrow {
+  font-size: 30px;
+  font-weight: bold;
+  color: red;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.origin-destination {
+  font-size: 26px;
+  display: flex;
+}
+
+.time {
+  font-weight: bold;
+  color: black;
+}
+
+.airport {
+  color: rgb(75, 74, 74);
+  margin-left: 1rem;
+}
+
+.duration {
+  padding: 1rem 2rem;
+  font-size: 20px;
+  color: gray;
+}
+
+.stops {
+  padding: 1rem 2rem;
+  font-size: 20px;
+  color: blue;
+}
+
+.price {
+  font-size: 26px;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  margin-left: 1rem;
+  border-left: 1px groove lightgray;
+}
+
+.cabins {
+  text-align: center;
+  vertical-align: middle;
+  color: rgb(110, 110, 110);
+  display: table-row;
+  transform: translate(195%, 185%);
+  font-size: 20px;
+}
+
+.cabin {
+  display: table-cell;
+  border: 1px solid gray;
+  padding: 9px 12px;
+}
+
+.selected {
+  border-bottom: 3px solid red;
+}
+
+.index {
+  display: table;
+  height: 20%;
+  width: auto;
+  background-color: darkblue;
+  color: wheat;
+  transform: translate(150%, 20%);
+}
+
+.row {
+  display: table-row;
+}
+
+.input-cell {
+  display: table-cell;
+  padding: 1rem;
+}
+
+.submit {
+  vertical-align: middle;
+  text-align: center;
+}

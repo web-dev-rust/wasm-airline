@@ -1,6 +1,7 @@
 use yew_router::{route::Route, service::RouteService, Switch};
 use yew::prelude::*;
 use yew::virtual_dom::VNode;
+
 use crate::app::Airline;
 
 
@@ -12,15 +13,21 @@ pub enum AppRoute {
     Index
 }
 
+#[derive(Debug)]
 pub struct Model {
     route_service: RouteService<()>,
     route: Route<()>,
     link: ComponentLink<Self>,
+    origin: String,
+    destination: String,
+    departure: String
 }
-
 pub enum Msg {
     RouteChanged(Route<()>),
     ChangeRoute(AppRoute),
+    UpdateOrigin(String),
+    UpdateDestination(String),
+    UpdateDeparture(String)
 }
 
 impl Model {
@@ -46,6 +53,9 @@ impl Component for Model {
             route_service,
             route,
             link,
+            origin: String::new(),
+            destination: String::new(),
+            departure: String::new() 
         }
     }
 
@@ -55,7 +65,10 @@ impl Component for Model {
             Msg::ChangeRoute(route) => {
                 self.route = route.into();
                 self.route_service.set_route(&self.route.route, ());
-            }
+            },
+            Msg::UpdateOrigin(origin) => self.origin = origin[0..3].to_string(),
+            Msg::UpdateDestination(destination) => self.destination = destination[0..3].to_string(),
+            Msg::UpdateDeparture(departure) => self.departure = departure
         }
         true
     }
@@ -83,12 +96,47 @@ impl Component for Model {
 impl Model {
     fn view_index(&self) -> Html {
         html!{
-            <button onclick=&self.change_route(AppRoute::Oneway
-                {departure: "2020-08-21".to_string(), 
-                 origin: "POA".to_string(), 
-                 destination: "GRU".to_string()}) > 
-                {"Submit"}
-            </button>
+            <div class="index">
+                <div class="row">
+                    <div class="input-cell">
+                        <p> {"Origin"} </p>
+                        <input
+                            type = "text",
+                            value = &*self.origin,
+                            oninput = self.link.callback(|e: InputData| Msg::UpdateOrigin(e.value)),
+                        />
+                    </div>
+
+                    <div class="input-cell">
+                        <p> {"Destination"} </p>
+                        <input
+                            type = "text",
+                            value = &*self.destination,
+                            oninput = self.link.callback(|e: InputData| Msg::UpdateDestination(e.value)),
+                        />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-cell">
+                        <p> {"Departure"} </p>
+                        <input
+                            type = "text",
+                            value = &*self.departure,
+                            oninput = self.link.callback(|e: InputData| Msg::UpdateDeparture(e.value)),
+                        />
+                    </div>
+
+                    <div class="input-cell submit">
+                        <button onclick=&self.change_route(AppRoute::Oneway
+                            {departure: self.departure.clone(), 
+                            origin: self.origin.clone(), 
+                            destination: self.destination.clone()}) > 
+                            {"Submit"}
+                        </button>
+                    </div>
+                </div>
+            </div>
         }
     }
 }

@@ -3,52 +3,57 @@ use serde::{Deserialize, Serialize};
 use crate::best_prices::BestPrices;
 use crate::reccomendation::Recommendations;
 
-pub fn fetch_gql() -> Value {
+pub fn fetch_gql(departure: String, origin: String, destination: String) -> Value {
     json!({
-        "query": "{
-            recommendations(departure: \"2020-07-21\", 
-                origin: \"POA\", 
-                destination: \"GRU\") {
-                data{
-                recommendedFlightCode
-                flights {
-                    flightCode
-                    flightDuration
-                    stops
-                    arrival {
-                        cityName
-                        airportName
-                        airportCode
-                        dateTime
+        "variables": {
+            "departure": departure,
+            "origin": origin,
+            "destination": destination
+        },
+        "query": "query($departure: String!, $origin: String!, $destination: String!) {
+                recommendations(departure: $departure, 
+                    origin: $origin, 
+                    destination: $destination) {
+                    data{
+                    recommendedFlightCode
+                    flights {
+                        flightCode
+                        flightDuration
+                        stops
+                        arrival {
+                            cityName
+                            airportName
+                            airportCode
+                            dateTime
+                        }
+                        departure {
+                            cityName
+                            airportName
+                            airportCode
+                            dateTime
+                        }
+                        segments {
+                        flightNumber
+                        equipment {
+                            name
+                            code
+                        }
+                        }
+                        cabins {
+                            code
+                            displayPrice
+                            availabilityCount
+                        }
                     }
-                    departure {
-                        cityName
-                        airportName
-                        airportCode
-                        dateTime
-                    }
-                    segments {
-                    flightNumber
-                    equipment {
-                        name
-                        code
-                    }
-                    }
-                    cabins {
-                        code
-                        displayPrice
-                        availabilityCount
                     }
                 }
+                bestPrices(departure: $departure, origin: $origin, destination: $destination) {
+                    bestPrices {
+                        date
+                        available
+                        price {amount}
+                    }
                 }
-            }
-            bestPrices(departure: \"2020-07-21\", origin: \"POA\", destination: \"GRU\") {
-                bestPrices {
-                    date
-                    available
-                    price {amount}
-                }
-             }
         }"
     })
 }
