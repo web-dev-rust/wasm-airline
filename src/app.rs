@@ -6,20 +6,29 @@ use yew::format::{Text, Json};
 use serde_json::from_str;
 use crate::gql::{GqlResponse, fetch_gql};
 
-
 pub struct Airline {
     fetch: FetchService,
     link: ComponentLink<Self>,
     fetch_task: Option<FetchTask>,
     fetching: bool,
     graphql_url: String,
-    graphql_response: Option<GqlResponse>
+    graphql_response: Option<GqlResponse>,
+    filter_cabin: String,
+    departure: String,
+    origin: String,
+    destination: String
 }
 
+#[derive(Properties, Clone)]
+pub struct Props {
+    pub departure: String,
+    pub origin: String,
+    pub destination: String
+}
 
 impl Airline {
     pub fn fetch_data(&mut self) {
-        let request = fetch_gql();
+        let request = fetch_gql(self.departure.clone(), self.origin.clone(), self.destination.clone());
   
           let callback = self.link.callback(
               move |response: Response<Text>| {
@@ -47,21 +56,26 @@ impl Airline {
 
 pub enum Msg {
     FetchGql(Option<Text>),
-    Fetching(bool)
+    Fetching(bool),
+    Cabin(String),
 }
 
 impl Component for Airline {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Airline {
             fetch: FetchService::new(),
             link: link,
             fetch_task: None,
             fetching: true,
             graphql_url: "http://localhost:4000/graphql".to_string(),
-            graphql_response: None
+            graphql_response: None,
+            filter_cabin: String::from("Y"),
+            departure: props.departure,
+            origin: props.origin,
+            destination: props.destination
         }
     }
 
@@ -93,7 +107,10 @@ impl Component for Airline {
             },
             Msg::Fetching(fetch) => {
                 self.fetching = fetch;
-            }
+            },
+            Msg::Cabin(c) => {
+                self.filter_cabin = c
+            },
         }
         true
     }
@@ -110,7 +127,10 @@ impl Component for Airline {
                 <div class="body">
                     { 
                         if let Some(data) = &self.graphql_response {
-                            data.clone().best_prices().view()
+                            html!{<div>
+                                <div> {data.clone().best_prices().view()} </div>
+                                <div> { data.clone().recommendations().view(&self.link, &self.filter_cabin) } </div>
+                            </div> }
                         } else {
                             html!{
                                 <p class="failed-fetch">
