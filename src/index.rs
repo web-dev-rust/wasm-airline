@@ -30,15 +30,6 @@ pub enum Msg {
     UpdateDeparture(String)
 }
 
-impl Model {
-    fn change_route(&self, app_route: AppRoute) -> Callback<MouseEvent> {
-        self.link.callback(move |_| {
-            let route = app_route.clone();
-            Msg::ChangeRoute(route)
-        })
-    }
-}
-
 impl Component for Model {
     type Message = Msg;
     type Properties = ();
@@ -94,6 +85,13 @@ impl Component for Model {
 }
 
 impl Model {
+    fn change_route(&self, app_route: AppRoute) -> Callback<MouseEvent> {
+        self.link.callback(move |_| {
+            let route = app_route.clone();
+            Msg::ChangeRoute(route)
+        })
+    }
+
     fn view_index(&self) -> Html {
         html!{
             <div class="index">
